@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  flask:
+    build: ./flask
+    command: >
+      sh -c "python manage.py create_db &&
+             python manage.py load_flats &&
+             python manage.py run -h 0.0.0.0 -p 8080"
+    volumes:
+      - ./flask/:/usr/src/app/
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+  db:
+    image: postgres:14.5-alpine
+    ports:
+      - "5431:5431"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=sreality_scrapy
+      - POSTGRES_PASSWORD=sreality_scrapy
+      - POSTGRES_DB=sreality_scrapy_db
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8000:8080"
+volumes:
+  postgres_data:
