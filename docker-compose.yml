@@ -17,14 +17,13 @@ services:
       - db
   db:
     image: postgres:14.5-alpine
-    ports:
-      - "5431:5431"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=sreality_scrapy
       - POSTGRES_PASSWORD=sreality_scrapy
       - POSTGRES_DB=sreality_scrapy_db
+      - POSTGRES_HOST=localhost
   adminer:
     image: adminer
     restart: always
